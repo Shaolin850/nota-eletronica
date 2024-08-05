@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,15 +9,21 @@
             font-family: Arial, sans-serif;
             padding: 10px;
             margin: 0;
+            background-color: #f4f4f4;
         }
 
         .container {
-            max-width: 600px;
+            max-width: 1000px;
             margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
             text-align: center;
+            color: #333;
         }
 
         form {
@@ -27,25 +33,25 @@
 
         label {
             margin-top: 10px;
+            font-weight: bold;
+            color: #333;
         }
 
         input, select, button {
             margin-top: 5px;
-            padding: 8px;
+            padding: 10px;
             font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
 
-        .radio-group, .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
+        input[type="text"], input[type="email"], input[type="date"] {
+            width: 100%;
         }
 
-        .radio-group label, .checkbox-group label {
-            margin-right: 10px;
-        }
-
-        .radio-group input, .checkbox-group input {
-            margin-right: 5px;
+        select {
+            width: 100%;
         }
 
         button {
@@ -61,6 +67,30 @@
             background-color: #45a049;
         }
 
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .radio-group label, .checkbox-group label {
+            margin-right: 10px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-group input, .checkbox-group input {
+            margin-right: 5px;
+        }
+
+        .checkbox-group {
+            flex-direction: column;
+        }
+
+        .radio-group {
+            flex-direction: row;
+        }
+
         @media (max-width: 600px) {
             .radio-group, .checkbox-group {
                 flex-direction: column;
@@ -73,7 +103,7 @@
             const marcaSelect = document.getElementById("marca");
 
             const marcas = {
-                Notebook: ["Dell", "HP", "Lenovo", "Asus", "Acer"],
+                Notebook: ["Dell", "HP", "Lenovo", "Asus", "Acer", "Positivo"],
                 Celular: ["Apple", "Samsung", "Xiaomi", "Motorola", "Nokia"],
                 Tablet: ["Apple", "Samsung", "Lenovo", "Asus", "Huawei"]
             };
@@ -161,18 +191,14 @@ Condições Gerais:
 
             <label>Nota Fiscal:</label>
             <div class="radio-group">
-                <input type="radio" id="nota_fiscal_sim" name="nota_fiscal" value="Sim">
-                <label for="nota_fiscal_sim">Sim</label>
-                <input type="radio" id="nota_fiscal_nao" name="nota_fiscal" value="Não">
-                <label for="nota_fiscal_nao">Não</label>
+                <label><input type="radio" id="nota_fiscal_sim" name="nota_fiscal" value="Sim"> Sim</label>
+                <label><input type="radio" id="nota_fiscal_nao" name="nota_fiscal" value="Não"> Não</label>
             </div>
 
             <label>Garantia:</label>
             <div class="radio-group">
-                <input type="radio" id="garantia_sim" name="garantia" value="Sim">
-                <label for="garantia_sim">Sim</label>
-                <input type="radio" id="garantia_nao" name="garantia" value="Não">
-                <label for="garantia_nao">Não</label>
+                <label><input type="radio" id="garantia_sim" name="garantia" value="Sim"> Sim</label>
+                <label><input type="radio" id="garantia_nao" name="garantia" value="Não"> Não</label>
             </div>
 
             <label for="modelo">Qual é o Aparelho ?:</label>
