@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nota Eletrônica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+        }
+
+        input, select, button {
+            margin-top: 5px;
+            padding: 8px;
+            font-size: 1em;
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .radio-group label, .checkbox-group label {
+            margin-right: 10px;
+        }
+
+        .radio-group input, .checkbox-group input {
+            margin-right: 5px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        @media (max-width: 600px) {
+            .radio-group, .checkbox-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <script>
+        function updateBrands() {
+            const modelo = document.getElementById("modelo").value;
+            const marcaSelect = document.getElementById("marca");
+
+            const marcas = {
+                Notebook: ["Dell", "HP", "Lenovo", "Asus", "Acer"],
+                Celular: ["Apple", "Samsung", "Xiaomi", "Motorola", "Nokia"],
+                Tablet: ["Apple", "Samsung", "Lenovo", "Asus", "Huawei"]
+            };
+
+            marcaSelect.innerHTML = "";
+            marcas[modelo].forEach(marca => {
+                const option = document.createElement("option");
+                option.value = marca;
+                option.textContent = marca;
+                marcaSelect.appendChild(option);
+            });
+        }
+
+        function sendWhatsAppMessage(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById("nome").value;
+            const endereco = document.getElementById("endereco").value;
+            const telefone = document.getElementById("telefone").value;
+            const cidade = document.getElementById("cidade").value;
+            const email = document.getElementById("email").value;
+            const notaFiscal = document.querySelector('input[name="nota_fiscal"]:checked').value;
+            const garantia = document.querySelector('input[name="garantia"]:checked').value;
+            const modelo = document.getElementById("modelo").value;
+            const marca = document.getElementById("marca").value;
+            const defeito = document.getElementById("defeito").value;
+            const descricao = document.getElementById("descricao").value;
+            const total = document.getElementById("total").value;
+            const dataEntrada = document.getElementById("data_entrada").value;
+            const dataSaida = document.getElementById("data_saida").value;
+            const whatsapp = document.getElementById("whatsapp").value;
+            const statusElements = document.querySelectorAll('input[name="status"]:checked');
+            const status = Array.from(statusElements).map(el => el.value).join(", ");
+
+            const message = `Primeira Linha - Acessórios e Aparelhos.
+
+NOTA ELETRÔNICA:
+
+Nome Do Cliente: ${nome}
+Endereço Do Cliente: ${endereco}
+Telefone Do Cliente: ${telefone}
+Cidade: ${cidade}
+E-mail Do Cliente: ${email}
+Nota Fiscal: ${notaFiscal}
+Garantia: ${garantia}
+Qual é o Aparelho ?: ${modelo}
+Marca do Aparelho: ${marca}
+Defeito Relatado: ${defeito}
+Descrição: ${descricao}
+Total R$: ${total}
+Data de Entrada: ${dataEntrada}
+Data de Saída: ${dataSaida}
+Status do Aparelho: ${status}
+
+Condições Gerais:
+1. A garantia dos nossos serviços é de 90 dias.
+2. A garantia dos produtos é válida SOMENTE contra defeito de fabricação.
+3. Não cobrimos defeitos causados por mau uso, má instalação, queda ou desgaste.
+4. Mercadorias deixadas no prazo estipulado serão desmontadas para pagar os custos.
+5. Todos os valores estão no preço estipulado e descritos na Ordem de Serviço acima.`;
+
+            const whatsappUrl = `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Nota Eletrônica</h1>
+        <form onsubmit="sendWhatsAppMessage(event)">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required>
+
+            <label for="endereco">Endereço:</label>
+            <input type="text" id="endereco" name="endereco" required>
+
+            <label for="telefone">Telefone:</label>
+            <input type="text" id="telefone" name="telefone" required>
+
+            <label for="cidade">Cidade:</label>
+            <input type="text" id="cidade" name="cidade" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label>Nota Fiscal:</label>
+            <div class="radio-group">
+                <input type="radio" id="nota_fiscal_sim" name="nota_fiscal" value="Sim">
+                <label for="nota_fiscal_sim">Sim</label>
+                <input type="radio" id="nota_fiscal_nao" name="nota_fiscal" value="Não">
+                <label for="nota_fiscal_nao">Não</label>
+            </div>
+
+            <label>Garantia:</label>
+            <div class="radio-group">
+                <input type="radio" id="garantia_sim" name="garantia" value="Sim">
+                <label for="garantia_sim">Sim</label>
+                <input type="radio" id="garantia_nao" name="garantia" value="Não">
+                <label for="garantia_nao">Não</label>
+            </div>
+
+            <label for="modelo">Qual é o Aparelho ?:</label>
+            <select id="modelo" name="modelo" onchange="updateBrands()">
+                <option value="Notebook">Notebook</option>
+                <option value="Celular">Celular</option>
+                <option value="Tablet">Tablet</option>
+            </select>
+
+            <label for="marca">Marca do Aparelho:</label>
+            <select id="marca" name="marca"></select>
+
+            <label for="defeito">Defeito Relatado:</label>
+            <input type="text" id="defeito" name="defeito" required>
+
+            <label for="descricao">Descrição:</label>
+            <input type="text" id="descricao" name="descricao" required>
+
+            <label for="total">Total R$:</label>
+            <input type="text" id="total" name="total" required>
+
+            <label for="data_entrada">Data de Entrada:</label>
+            <input type="date" id="data_entrada" name="data_entrada" required>
+
+            <label for="data_saida">Data de Saída:</label>
+            <input type="date" id="data_saida" name="data_saida" required>
+
+            <label for="whatsapp">WhatsApp do Cliente:</label>
+            <input type="text" id="whatsapp" name="whatsapp" required>
+
+            <label>Status do Aparelho:</label>
+            <div class="checkbox-group">
+                <div>
+                    <input type="checkbox" id="arranhado" name="status" value="Arranhado">
+                    <label for="arranhado">Arranhado</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="trincado" name="status" value="Trincado">
+                    <label for="trincado">Trincado</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="desligando" name="status" value="Desligando">
+                    <label for="desligando">Desligando</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="sem_bateria" name="status" value="Sem Bateria">
+                    <label for="sem_bateria">Sem Bateria</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="sem_chip" name="status" value="Sem Chip">
+                    <label for="sem_chip">Sem Chip</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="sem_cartao" name="status" value="Sem Cartão">
+                    <label for="sem_cartao">Sem Cartão</label>
+                </div>
+            </div>
+
+            <button type="submit">Enviar via WhatsApp</button>
+        </form>
+    </div>
+</body>
+</html>
