@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nota Eletrônica</title>
+    <title>Nota  Fiscal Eletrônica</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -96,6 +96,16 @@
                 flex-direction: column;
             }
         }
+
+        .email-optional {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .email-optional input[type="checkbox"] {
+            margin-right: 10px;
+        }
     </style>
     <script>
         function updateBrands() {
@@ -124,7 +134,8 @@
             const endereco = document.getElementById("endereco").value;
             const telefone = document.getElementById("telefone").value;
             const cidade = document.getElementById("cidade").value;
-            const email = document.getElementById("email").value;
+            const emailCheck = document.getElementById("email_check").checked;
+            const email = emailCheck ? document.getElementById("email").value : "Não informado";
             const notaFiscal = document.querySelector('input[name="nota_fiscal"]:checked').value;
             const garantia = document.querySelector('input[name="garantia"]:checked').value;
             const modelo = document.getElementById("modelo").value;
@@ -140,7 +151,7 @@
 
             const message = `Primeira Linha - Assistência Técnica.
 
-NOTA ELETRÔNICA:
+NOTA FISCAL ELETRÔNICA DO CLIENTE:
 
 Nome Do Cliente: ${nome}
 
@@ -152,7 +163,7 @@ Cidade: ${cidade}
 
 E-mail Pra Contato: ${email}
 
-Nota Fiscal: ${notaFiscal}
+Nota Fiscal De Fabrica: ${notaFiscal}
 
 Garantia: ${garantia}
 
@@ -186,7 +197,7 @@ Condições Gerais:
 </head>
 <body>
     <div class="container">
-        <h1>Nota Eletrônica</h1>
+        <h1>Nota Fiscal Eletrônica</h1>
         <form onsubmit="sendWhatsAppMessage(event)">
             <label for="nome">Nome:</label>
             <input type="text" id="nome" name="nome" required>
@@ -200,10 +211,14 @@ Condições Gerais:
             <label for="cidade">Cidade:</label>
             <input type="text" id="cidade" name="cidade" required>
 
+            <div class="email-optional">
+                <input type="checkbox" id="email_check" name="email_check" onchange="document.getElementById('email').disabled = !this.checked;">
+                <label for="email_check">Se o cliente tiver um e-mail pra contato, marque esta caixinha</label>
+            </div>
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" name="email" disabled>
 
-            <label>Nota Fiscal:</label>
+            <label>Nota Fiscal De Fabrica:</label>
             <div class="radio-group">
                 <label><input type="radio" id="nota_fiscal_sim" name="nota_fiscal" value="Sim"> Sim</label>
                 <label><input type="radio" id="nota_fiscal_nao" name="nota_fiscal" value="Não"> Não</label>
@@ -245,6 +260,11 @@ Condições Gerais:
 
             <label>Status do Aparelho:</label>
             <div class="checkbox-group">
+                <label><input type="checkbox" name="status" value="Aguardando Cliente"> Aguardando Cliente</label>
+                <label><input type="checkbox" name="status" value="Aguardando Peça"> Aguardando Peça</label>
+                <label><input type="checkbox" name="status" value="Em conserto"> Em conserto</label>
+                <label><input type="checkbox" name="status" value="Pronto para retirada"> Pronto para retirada</label>
+                <label><input type="checkbox" name="status" value="Entregue"> Entregue</label>
                 <label><input type="checkbox" id="arranhado" name="status" value="Arranhado"> Arranhado</label>
                 <label><input type="checkbox" id="trincado" name="status" value="Trincado"> Trincado</label>
                 <label><input type="checkbox" id="desligando" name="status" value="Desligando"> Desligando</label>
@@ -252,7 +272,6 @@ Condições Gerais:
                 <label><input type="checkbox" id="sem_chip" name="status" value="Sem Chip"> Sem Chip</label>
                 <label><input type="checkbox" id="sem_cartao_sd" name="status" value="Sem Cartão SD"> Sem Cartão SD</label>
             </div>
-
             <button type="submit">Enviar via WhatsApp</button>
         </form>
     </div>
