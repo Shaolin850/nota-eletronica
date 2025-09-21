@@ -1,0 +1,657 @@
+
+<html lang="pt-BR">
+<head>
+  <!--
+    Projeto: Nota Eletrônica - Assistência Técnica
+    Descrição: Sistema web para emissão e gestão de Ordens de Serviço (OS)
+    Tecnologias: HTML, CSS, JavaScript
+    Versão: Mobile-first, responsivo, acessível
+    Autor: Oscar + ChatGPT (Codespace)
+    Observações:
+      - Este HTML está preparado para o CSS e JS atualizados (Partes 2 e 3)
+      - Inclui melhorias para navegação mobile, acessibilidade e SEO
+      - Evita dados de exemplo
+  -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="Nota Eletrônica para Assistência Técnica Primeira Linha. Cadastre OS, acompanhe status, imprima e envie por WhatsApp." />
+  <meta name="author" content="Oscar" />
+  <title>Nota Eletrônica - Assistência Técnica Primeira Linha</title>
+
+  <!-- SEO / Open Graph -->
+  <meta property="og:title" content="Nota Eletrônica - Assistência Técnica Primeira Linha" />
+  <meta property="og:description" content="Sistema simples e profissional para emissão de Nota Eletrônica de assistência técnica primeira linha." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+
+  <!-- Ícones -->
+  <!-- Favicon usando emoji (inline SVG data URL) -->
+  <!-- Emoji usado: 🧾 (recibo) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.82em' font-size='90'%3E%F0%9F%A7%BE%3C/text%3E%3C/svg%3E">
+  <!-- apple-touch-icon (para iOS) — fallback -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.82em' font-size='90'%3E%F0%9F%A7%BE%3C/text%3E%3C/svg%3E">
+  <!-- Atalho tradicional também -->
+  <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.82em' font-size='90'%3E%F0%9F%A7%BE%3C/text%3E%3C/svg%3E">
+  <!-- CSS principal -->
+  <link rel="stylesheet" href="./styles.css" />
+
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Preferência de tema -->
+  <meta name="theme-color" content="#0ea5e9" />
+</head>
+<body data-theme="light">
+  <!-- Link para pular para o conteúdo -->
+  <a href="#content" class="skip-link">Pular para conteúdo</a>
+
+  <!-- Aviso sem JS -->
+  <noscript>
+    <div class="noscript-alert">
+      Este aplicativo requer JavaScript habilitado para funcionar corretamente.
+    </div>
+  </noscript>
+
+  <!-- Loader -->
+  <div id="app-loader" aria-hidden="true" hidden>
+    <div class="spinner" role="status" aria-label="Carregando">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div id="toast-stack" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Cabeçalho -->
+  <header class="app-header" role="banner">
+    <div class="container">
+      <div class="brand">
+        <button id="btn-menu" class="icon-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="main-nav">
+          <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <a href="#" class="logo" aria-label="Página inicial">
+          <!-- Emoji usado como ícone do título (acessível) -->
+          <span class="site-emoji" role="img" aria-label="Recibo">🧾</span>
+          <strong>Nota Eletrônica</strong>
+          <span class="brand-subtitle">Assistência Técnica Primeira Linha</span>
+        </a>
+      </div>
+
+      <nav id="main-nav" class="main-nav" role="navigation" aria-label="Menu principal">
+        <ul class="nav-list">
+          <li><a href="#nova-os" class="nav-link">Nova OS</a></li>
+          <li><a href="#lista-os" class="nav-link">Lista de OS</a></li>
+          <li><a href="#condicoes" class="nav-link">Condições</a></li>
+          <li><a href="#sobre" class="nav-link">Sobre</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button id="btn-theme" class="icon-btn" aria-label="Alternar tema claro/escuro">
+          <svg id="icon-sun" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 4V2M12 22v-2M4.93 4.93 3.51 3.51M20.49 20.49 19.07 19.07M4 12H2M22 12h-2M4.93 19.07 3.51 20.49M20.49 3.51 19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="4" fill="currentColor"/>
+          </svg>
+          <svg id="icon-moon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" hidden>
+            <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" stroke="currentColor" stroke-width="2" fill="none" />
+          </svg>
+        </button>
+        <button id="btn-new-os" class="btn btn-primary">Nova OS</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <h1>Nota Eletrônica para Assistência Técnica</h1>
+        <p>Registre, gerencie e compartilhe Ordens de Serviço. Envie por WhatsApp e acompanhe o status até a devolução.</p>
+        <div class="hero-actions">
+          <a href="#nova-os" class="btn btn-primary">Emitir nova Nota</a>
+          <a href="#lista-os" class="btn btn-ghost">Ver lista de OS</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="mockup-card">
+          <div class="mockup-header"></div>
+          <div class="mockup-lines">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conteúdo -->
+  <main id="content" class="container" role="main">
+    <!-- Nova OS -->
+    <section id="nova-os" class="card section">
+      <header class="section-header">
+        <h2>Nova Ordem de Serviço (Nota Eletrônica)</h2>
+        <p>Preencha os dados do cliente e do aparelho. Depois, imprima ou envie por WhatsApp.</p>
+      </header>
+
+      <form id="form-os" class="form-grid" autocomplete="on" novalidate>
+        <!-- Dados do Cliente -->
+        <fieldset class="field-group">
+          <legend>Dados do Cliente</legend>
+
+          <div class="field">
+            <label for="cliente-nome">Nome do cliente</label>
+            <input type="text" id="cliente-nome" name="clienteNome" placeholder="Ex.: Maria Silva" required />
+            <small class="hint">Obrigatório</small>
+          </div>
+
+          <div class="field">
+            <label for="cliente-endereco">Endereço</label>
+            <input type="text" id="cliente-endereco" name="clienteEndereco" placeholder="Rua, número, bairro, cidade" required />
+            <small class="hint">Obrigatório</small>
+          </div>
+
+          <div class="field">
+            <label for="cliente-telefone">Telefone (WhatsApp)</label>
+            <input type="tel" id="cliente-telefone" name="clienteTelefone" placeholder="(DDD) 90000-0000" inputmode="tel" required />
+            <small class="hint">Obrigatório. Usado para enviar via WhatsApp.</small>
+          </div>
+
+          <div class="field">
+            <label for="cliente-email">E-mail (opcional)</label>
+            <input type="email" id="cliente-email" name="clienteEmail" placeholder="email@exemplo.com" />
+            <small class="hint">Opcional</small>
+          </div>
+        </fieldset>
+
+        <!-- Garantia / Nota -->
+        <fieldset class="field-group">
+          <legend>Garantia e Nota</legend>
+
+          <div class="field">
+            <label>Nota fiscal de fábrica</label>
+            <div class="choice">
+              <label class="radio">
+                <input type="radio" name="notaFabrica" value="Sim" required />
+                <span>Sim</span>
+              </label>
+              <label class="radio">
+                <input type="radio" name="notaFabrica" value="Não" />
+                <span>Não</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Garantia do fabricante</label>
+            <div class="choice">
+              <label class="radio">
+                <input type="radio" name="garantiaFab" value="Sim" required />
+                <span>Sim</span>
+              </label>
+              <label class="radio">
+                <input type="radio" name="garantiaFab" value="Não" />
+                <span>Não</span>
+              </label>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Aparelho -->
+        <fieldset class="field-group">
+          <legend>Informações do Aparelho</legend>
+
+          <div class="field">
+            <label for="tipo-aparelho">Tipo de aparelho</label>
+            <select id="tipo-aparelho" name="tipoAparelho" required>
+              <option value="" selected disabled>Selecione o tipo</option>
+              <option value="Notebook">Notebook</option>
+              <option value="Smartphone">Smartphone</option>
+              <option value="Tablet">Tablet</option>
+            </select>
+            <small class="hint">Obrigatório</small>
+          </div>
+
+          <div class="field">
+            <label for="marca-aparelho">Marca do aparelho</label>
+            <select id="marca-aparelho" name="marcaAparelho" required>
+              <option value="" selected disabled>Selecione a marca</option>
+              <option>Apple</option>
+              <option>Samsung</option>
+              <option>Xiaomi</option>
+              <option>Motorola</option>
+              <option>Asus</option>
+              <option>Lenovo</option>
+              <option>HP</option>
+              <option>Dell</option>
+              <option>Acer</option>
+              <option>LG</option>
+              <option>Huawei</option>
+              <option>Microsoft</option>
+              <option>Philco</option>
+              <option>Positivo</option>
+              <option>Multilaser</option>
+              <option>Outra</option>
+            </select>
+            <small class="hint">Obrigatório</small>
+          </div>
+
+          <div class="field">
+            <label for="modelo-aparelho">Modelo</label>
+            <input type="text" id="modelo-aparelho" name="modeloAparelho" placeholder="Ex.: iPhone 12, Galaxy S21, Ideapad 3" required />
+            <small class="hint">Obrigatório</small>
+          </div>
+
+          <div class="field">
+            <label for="serial-aparelho">Número de série / IMEI (opcional)</label>
+            <input type="text" id="serial-aparelho" name="serialAparelho" placeholder="S/N ou IMEI" />
+            <small class="hint">Opcional</small>
+          </div>
+        </fieldset>
+
+        <!-- Descrição e Valores -->
+        <fieldset class="field-group">
+          <legend>Descrição e Valores</legend>
+
+          <div class="field">
+            <label for="defeito-relatado">Defeito relatado pelo cliente</label>
+            <textarea id="defeito-relatado" name="defeitoRelatado" rows="3" placeholder="Descreva o problema relatado" required></textarea>
+            <small class="hint">Obrigatório</small>
+          </div>
+
+          <div class="field">
+            <label for="descricao-cliente">Descrição para o cliente (opcional)</label>
+            <textarea id="descricao-cliente" name="descricaoCliente" rows="3" placeholder="Observações adicionais para o cliente (opcional)"></textarea>
+            <small class="hint">Opcional</small>
+          </div>
+
+          <div class="field">
+            <label for="valor-total">Total do conserto (R$)</label>
+            <input type="number" id="valor-total" name="valorTotal" placeholder="0,00" step="0.01" min="0" required />
+            <small class="hint">Obrigatório</small>
+          </div>
+
+          <div class="field">
+            <label for="data-entrada">Data de entrada</label>
+            <input type="date" id="data-entrada" name="dataEntrada" required />
+            <small class="hint">Obrigatório</small>
+          </div>
+
+          <div class="field">
+            <label for="data-saida">Data de saída (previsão ou efetiva)</label>
+            <input type="date" id="data-saida" name="dataSaida" />
+            <small class="hint">Opcional no início, obrigatório na conclusão</small>
+          </div>
+        </fieldset>
+
+        <!-- Status -->
+        <fieldset class="field-group">
+          <legend>Status do aparelho</legend>
+
+          <div class="field">
+            <label for="status-aparelho">Status atual</label>
+            <select id="status-aparelho" name="statusAparelho" required>
+              <option value="" selected disabled>Selecione o status</option>
+              <option>Recebido na assistência</option>
+              <option>Em diagnóstico</option>
+              <option>Aguardando aprovação do cliente</option>
+              <option>Em conserto</option>
+              <option>Aguardando peças</option>
+              <option>Consertado e testado 100%</option>
+              <option>Pronto para retirada</option>
+              <option>Entregue ao cliente</option>
+            </select>
+            <small class="hint">Obrigatório</small>
+          </div>
+
+          <div class="status-timeline" aria-live="polite">
+            <ol id="status-list" class="timeline">
+              <li data-step="Recebido na assistência">Recebido na assistência</li>
+              <li data-step="Em diagnóstico">Em diagnóstico</li>
+              <li data-step="Aguardando aprovação do cliente">Aguardando aprovação do cliente</li>
+              <li data-step="Em conserto">Em conserto</li>
+              <li data-step="Aguardando peças">Aguardando peças</li>
+              <li data-step="Consertado e testado 100%">Consertado e testado 100%</li>
+              <li data-step="Pronto para retirada">Pronto para retirada</li>
+              <li data-step="Entregue ao cliente">Entregue ao cliente</li>
+            </ol>
+          </div>
+        </fieldset>
+
+        <!-- Condições Gerais -->
+        <fieldset id="condicoes" class="field-group emphasize">
+          <legend>Condições Gerais</legend>
+          <ol class="condicoes-list">
+            <li>A garantia dos nossos serviços é de 90 dias.</li>
+            <li>A garantia dos produtos é válida SOMENTE contra defeito de fabricação.</li>
+            <li>Não cobrimos defeitos causados por mau uso, má instalação, queda ou desgaste.</li>
+            <li>Mercadorias deixadas no prazo estipulado serão desmontadas para pagar os custos.</li>
+            <li>Todos os valores estão no preço estipulado e descritos na Ordem de Serviço acima.</li>
+          </ol>
+          <div class="condicoes-ack">
+            <label class="checkbox">
+              <input type="checkbox" id="condicoes-aceite" required />
+              <span>Li e concordo com as condições gerais</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- Ações do formulário -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="btn-salvar-os">Salvar OS</button>
+          <button type="button" class="btn btn-secondary" id="btn-limpar-form">Limpar</button>
+          <button type="button" class="btn btn-ghost" id="btn-preencher-exemplo" title="Ocultar em produção">Preencher Exemplo</button>
+        </div>
+
+        <!-- Ações de Compartilhar/Imprimir (fixa no mobile) -->
+        <div class="form-actions share-print">
+          <button type="button" class="btn btn-success" id="btn-whatsapp" aria-label="Enviar via WhatsApp">
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20.52 3.48A11.94 11.94 0 0 0 12.06 0 12 12 0 0 0 0 12c0 2.11.55 4.1 1.6 5.9L0 24l6.27-1.64A12.02 12.02 0 0 0 12.06 24 12 12 0 0 0 24 12c0-3.2-1.25-6.2-3.48-8.52zM12.06 22c-1.86 0-3.67-.5-5.25-1.44l-.38-.22-3.72.98.99-3.63-.25-.37A9.93 9.93 0 0 1 2.06 12C2.06 6.5 6.56 2 12.06 2 17.56 2 22.06 6.5 22.06 12c0 5.5-4.5 10-10 10zm5.64-7.64c-.3-.15-1.78-.88-2.05-.99-.27-.1-.47-.15-.67.15-.2.3-.77.98-.94 1.18-.17.2-.35.22-.65.07-.3-.15-1.24-.46-2.36-1.47-.87-.78-1.45-1.74-1.62-2.03-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.38-.02-.53-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.53.07-.8.38-.27.3-1.05 1.03-1.05 2.5 0 1.47 1.08 2.9 1.24 3.1.15.2 2.13 3.23 5.17 4.52.72.31 1.27.5 1.7.64.72.23 1.37.2 1.88.12.57-.08 1.78-.73 2.03-1.44.25-.7.25-1.3.17-1.44-.08-.14-.27-.22-.57-.37z" fill="currentColor"/>
+            </svg>
+            Enviar via WhatsApp
+          </button>
+          <button type="button" class="btn btn-outline" id="btn-imprimir">Imprimir Nota</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Lista de OS -->
+    <section id="lista-os" class="card section">
+      <header class="section-header">
+        <h2>Lista de Ordens de Serviço</h2>
+        <p>Pesquise, filtre e gerencie as notas emitidas.</p>
+      </header>
+
+      <div class="toolbar">
+        <div class="search">
+          <label for="busca-os" class="visually-hidden">Buscar OS</label>
+          <input type="search" id="busca-os" placeholder="Buscar por nome, aparelho, marca ou status..." />
+        </div>
+        <div class="filters">
+          <select id="filtro-status">
+            <option value="">Todos os status</option>
+            <option>Recebido na assistência</option>
+            <option>Em diagnóstico</option>
+            <option>Aguardando aprovação do cliente</option>
+            <option>Em conserto</option>
+            <option>Aguardando peças</option>
+            <option>Consertado e testado 100%</option>
+            <option>Pronto para retirada</option>
+            <option>Entregue ao cliente</option>
+          </select>
+          <select id="filtro-tipo">
+            <option value="">Todos os tipos</option>
+            <option>Notebook</option>
+            <option>Smartphone</option>
+            <option>Tablet</option>
+          </select>
+          <button id="btn-exportar" class="btn btn-ghost">Exportar JSON</button>
+          <button id="btn-importar" class="btn btn-ghost">Importar JSON</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="os-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Cliente</th>
+              <th>Contato</th>
+              <th>Tipo/Marca/Modelo</th>
+              <th>Status</th>
+              <th>Entrada</th>
+              <th>Saída</th>
+              <th>Total (R$)</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-os">
+            <!-- Linhas geradas via JS; no mobile viram cartões com data-col -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination">
+        <button class="btn btn-ghost" id="prev-page" disabled>Anterior</button>
+        <span id="page-info">Página 1 de 1</span>
+        <button class="btn btn-ghost" id="next-page" disabled>Próxima</button>
+      </div>
+    </section>
+
+    <!-- Sobre -->
+    <section id="sobre" class="card section">
+      <header class="section-header">
+        <h2>Sobre a Assistência</h2>
+      </header>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>Somos especializados em assistência técnica para celulares, notebooks e tablets. Consertos profissionais e testes rigorosos para garantir funcionamento 100%.</p>
+          <p>O sistema de Nota Eletrônica facilita a comunicação, a transparência e o acompanhamento de cada etapa do serviço.</p>
+        </div>
+        <div class="about-highlights">
+          <ul class="check-list">
+            <li>Profissionalismo e transparência</li>
+            <li>Garantia de 90 dias nos serviços</li>
+            <li>Peças com garantia de fabricação</li>
+            <li>Envio da nota por WhatsApp</li>
+            <li>Impressão rápida e layout limpo</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="app-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <strong>Nota Eletrônica</strong>
+        <span>Assistência Técnica Primeira Linha</span>
+        <p class="sm">© A Numero 1 do Largo do Tamarineiro.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#nova-os">Nova OS</a>
+        <a href="#lista-os">Lista</a>
+        <a href="#condicoes">Condições</a>
+        <a href="#sobre">Sobre</a>
+      </div>
+      <div class="footer-contact">
+        <p><strong>Contato:</strong> (71) 98629-8407 (Lucival)</p>
+        <p><strong>E-mail:</strong> lucivallopes78@gmail.com</p>
+        <p><strong>Endereço:</strong> Largo do Tamarineiro  n 08, sala 02, em cima da Farmácia do Trabalhador CEP : 40330-200</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal de impressão -->
+  <dialog id="print-modal" aria-labelledby="print-title">
+    <form method="dialog" class="modal-card">
+      <header class="modal-header">
+        <h3 id="print-title">Pré-visualização da Nota</h3>
+        <button class="icon-btn" value="cancel" aria-label="Fechar modal">
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12M18 6l-12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </header>
+      <section class="modal-content">
+        <div id="print-area">
+          <div class="print-header">
+            <div class="print-brand">
+              <span class="site-emoji" role="img" aria-label="Recibo">🧾</span>
+              <div>
+                <strong>Nota Eletrônica - Assistência Técnica Primeira Linha</strong>
+                <p>Contato: (71) 98629-8407 (Lucival)</p>
+                <p>Email:lucivallopes78@gmail.com</p>
+              </div>
+            </div>
+            <div class="print-meta">
+              <p><strong>Nº OS:</strong> <span id="print-os-id">-</span></p>
+              <p><strong>Data:</strong> <span id="print-os-data">-</span></p>
+            </div>
+          </div>
+
+          <div class="print-section">
+            <h4>Cliente</h4>
+            <table class="print-table">
+              <tr>
+                <th>Nome</th>
+                <td id="print-cli-nome">-</td>
+              </tr>
+              <tr>
+                <th>Endereço</th>
+                <td id="print-cli-endereco">-</td>
+              </tr>
+              <tr>
+                <th>Telefone</th>
+                <td id="print-cli-telefone">-</td>
+              </tr>
+              <tr>
+                <th>E-mail</th>
+                <td id="print-cli-email">-</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="print-section">
+            <h4>Aparelho</h4>
+            <table class="print-table">
+              <tr>
+                <th>Tipo</th>
+                <td id="print-ap-tipo">-</td>
+              </tr>
+              <tr>
+                <th>Marca</th>
+                <td id="print-ap-marca">-</td>
+              </tr>
+              <tr>
+                <th>Modelo</th>
+                <td id="print-ap-modelo">-</td>
+              </tr>
+              <tr>
+                <th>Serial/IMEI</th>
+                <td id="print-ap-serial">-</td>
+              </tr>
+              <tr>
+                <th>Nota de fábrica</th>
+                <td id="print-ap-nota">-</td>
+              </tr>
+              <tr>
+                <th>Garantia fabricante</th>
+                <td id="print-ap-garantia">-</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="print-section">
+            <h4>Serviço</h4>
+            <table class="print-table">
+              <tr>
+                <th>Defeito relatado</th>
+                <td id="print-defeito">-</td>
+              </tr>
+              <tr>
+                <th>Descrição ao cliente</th>
+                <td id="print-descricao">-</td>
+              </tr>
+              <tr>
+                <th>Valor total</th>
+                <td id="print-valor">-</td>
+              </tr>
+              <tr>
+                <th>Entrada</th>
+                <td id="print-entrada">-</td>
+              </tr>
+              <tr>
+                <th>Saída</th>
+                <td id="print-saida">-</td>
+              </tr>
+              <tr>
+                <th>Status</th>
+                <td id="print-status">-</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="print-section">
+            <h4>Condições Gerais</h4>
+            <ol class="condicoes-list print-condicoes">
+              <li>A garantia dos nossos serviços é de 90 dias.</li>
+              <li>A garantia dos produtos é válida SOMENTE contra defeito de fabricação.</li>
+              <li>Não cobrimos defeitos causados por mau uso, má instalação, queda ou desgaste.</li>
+              <li>Mercadorias deixadas no prazo estipulado serão desmontadas para pagar os custos.</li>
+              <li>Todos os valores estão no preço estipulado e descritos na Ordem de Serviço acima.</li>
+            </ol>
+          </div>
+
+          <div class="print-sign">
+            <div class="sign-block">
+              <span>_______________________________</span>
+              <p>Assinatura do Cliente</p>
+            </div>
+            <div class="sign-block">
+              <span>_______________________________</span>
+              <p>Assinatura do Responsável</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-footer">
+        <button class="btn btn-outline" value="cancel">Fechar</button>
+        <button class="btn btn-primary" id="btn-print-now" value="default">Imprimir</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Template de linha da tabela -->
+  <template id="row-os-template">
+    <tr>
+      <td class="col-id"></td>
+      <td class="col-cliente"></td>
+      <td class="col-contato"></td>
+      <td class="col-aparelho"></td>
+      <td class="col-status"></td>
+      <td class="col-entrada"></td>
+      <td class="col-saida"></td>
+      <td class="col-total"></td>
+      <td class="col-actions">
+        <button class="icon-btn action-view" title="Visualizar/Imprimir" aria-label="Visualizar OS">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" stroke="currentColor" stroke-width="2" fill="none"/>
+            <circle cx="12" cy="12" r="3" fill="currentColor"/>
+          </svg>
+        </button>
+        <button class="icon-btn action-edit" title="Editar" aria-label="Editar OS">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" fill="currentColor"/>
+            <path d="M20.71 7.04a1.003 1.003 0 0 0 0-1.42L18.37 3.29a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.83z" fill="currentColor"/>
+          </svg>
+        </button>
+        <button class="icon-btn action-delete" title="Excluir" aria-label="Excluir OS">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="icon-btn action-whatsapp" title="Enviar WhatsApp" aria-label="Enviar via WhatsApp">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.52 3.48A11.94 11.94 0 0 0 12.06 0 12 12 0 0 0 0 12c0 2.11.55 4.1 1.6 5.9L0 24l6.27-1.64A12.02 12.02 0 0 0 12.06 24 12 12 0 0 0 24 12c0-3.2-1.25-6.2-3.48-8.52z" fill="currentColor"/>
+          </svg>
+        </button>
+      </td>
+    </tr>
+  </template>
+
+  <!-- Tooltip -->
+  <div id="tooltip" role="tooltip" hidden>
+    <div id="tooltip-content"></div>
+    <div id="tooltip-arrow" data-popper-arrow></div>
+  </div>
+
+  <!-- Script principal -->
+  <script src="./app.js" defer></script>
+</body>
+</html>
